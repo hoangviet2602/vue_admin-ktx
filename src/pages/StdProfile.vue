@@ -14,9 +14,7 @@
       <li class="nav-item">
         <a class="nav-link" :class="{ active: activeTab === 'tab3' }" @click="activeTab = 'tab3'" href="#">Minh chứng</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" :class="{ active: activeTab === 'tab4' }" @click="activeTab = 'tab4'" href="#">Tài khoản</a>
-      </li>
+      
       <li class="nav-item">
         <a class="nav-link" :class="{ active: activeTab === 'tab5' }" @click="activeTab = 'tab5'" href="#">Lịch sử thu
           phí</a>
@@ -34,70 +32,68 @@
           <div class="row">
             <div class="col-lg-4 mx-0  border-right ">
               <div class="mx-auto img-thumbnail" style="width: 300px; height: 300px;">
-                <img src="" alt="Image" style="max-width: 100%; max-height: 100%;">
+                <img :src="'img/' + sinhVien.anh3x4" alt="Image" style="max-width: 100%; max-height: 100%;">
               </div>
             </div>
             <!-- tab 1 -->
             <div class="col-lg-8  ">
 
-              <h4 class="mt-0">NGUYỄN HOÀNG VIỆT</h4>
+              <h4 class="mt-0">{{this.sinhVien.hoten  }}</h4>
               <table class="table1">
                 <tbody>
                   <tr>
                     <th scope="row">Ngày sinh</th>
-                    <td>26/02/2001</td>
+                    <td>{{ this.sinhVien.dob}}</td>
                   </tr>
                   <tr>
                     <th scope="row">Giới tính</th>
-                    <td>Nam</td>
+                    <td v-if="this.sinhVien.gioitinh == 1">Nam</td>
+                    <td v-if="this.sinhVien.gioitinh == 0">Nữ</td>
                   </tr>
                   <tr>
                     <th scope="row">Điện thoại sinh viên</th>
-                    <td>0768570252</td>
+                    <td>{{ this.sinhVien.phone}}</td>
                   </tr>
                   <tr>
                     <th scope="row">SV năm</th>
-                    <td>5</td>
+                    <td>{{ this.sinhVien.namhoc}}</td>
                   </tr>
                   <tr>
                     <th scope="row">Sinh viên trường</th>
                     <td>Đại học Sư Phạm Kỹ Thuật Đà Nẵng</td>
                   </tr>
                   <tr>
-                    <th scope="row">Khoa</th>
-                    <td>Công nghệ số</td>
+                    <th scope="row">Ngành</th>
+                    <td>{{ this.sinhVien.nganhhoc}}</td>
                   </tr>
                   <tr>
                     <th scope="row">Mã sinh viên</th>
-                    <td>1911505310169</td>
+                    <td>{{ this.sinhVien.masinhvien}}</td>
                   </tr>
                   <tr>
                     <th scope="row">Mã ký túc xá</th>
-                    <td>101A1911505310169</td>
+                    <td>{{ this.sinhVien.id}}</td>
                   </tr>
                   <tr>
                     <th scope="row">Tôn giáo</th>
-                    <td>không</td>
+                    <td>{{ this.sinhVien.tonGiao}}</td>
                   </tr>
                   <tr>
-                    <th scope="row">Dân tộc</th>
-                    <td>Kinh</td>
+                    <th scope="row">Quốc tịch</th>
+                    <td>{{ this.sinhVien.quocTich}}</td>
                   </tr>
-                  <tr>
-                    <th scope="row">Quốc gia</th>
-                    <td>Việt Nam</td>
-                  </tr>
+                  
                   <tr>
                     <th scope="row">CCCD</th>
-                    <td>1234124123</td>
+                    <td>{{ this.sinhVien.cccd}}</td>
                   </tr>
                   <tr>
                     <th scope="row">Ngày cấp CCCD</th>
-                    <td>20/1/2021</td>
+                    <td>{{ moment(this.sinhVien.ngaycap).format('DD/MM/yyyy ')  }}</td>
                   </tr>
                   <tr>
                     <th scope="row">Nơi cấp CCCD</th>
-                    <td>Huế</td>
+                    <td>{{ this.sinhVien.noicap}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -113,7 +109,7 @@
         <h1>Tab 3 content</h1>
       </div>
       <div v-show="activeTab === 'tab4'" class="tab-pane active">
-        <h1>Tab 4 content</h1>
+      
       </div>
       <div v-show="activeTab === 'tab5'" class="tab-pane active">
         <h1>Tab 5 content</h1>
@@ -123,11 +119,26 @@
 </template>
 
 <script>
+import axios from 'axios';
+import moment from 'moment';
 export default {
   data() {
     return {
-      activeTab: 'tab1'
+      moment,
+      activeTab: 'tab1',
+      sinhVien: []
     }
+  },
+  mounted() {
+    axios.get(`https://localhost:7252/api/SinhViens/`+ this.$route.query.id)
+      .then(response => {
+        this.sinhVien = response.data;
+        
+        console.log(this.sinhVien);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 }
 </script>

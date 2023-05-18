@@ -16,7 +16,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import App from "./App.vue";
-
+import Notifications from 'vue-notification'
 // LightBootstrap plugin
 import LightBootstrap from "./light-bootstrap-main";
 
@@ -27,6 +27,7 @@ import "./registerServiceWorker";
 // plugin setup
 Vue.use(VueRouter);
 Vue.use(LightBootstrap);
+Vue.use(Notifications);
 //  Vue.use(materialKit)
 // configure router
 const router = new VueRouter({

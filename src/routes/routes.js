@@ -15,6 +15,7 @@ import Details from 'src/pages/DetailsRequest.vue'
 import EditRoom from 'src/pages/EditRoom.vue'
 import StdProfile from 'src/pages/StdProfile.vue' 
 import Bills from 'src/pages/Bill.vue'
+import ListSV from 'src/pages/ListSinhVien.vue'
 const routes = [
   {
     path: '/',
@@ -45,6 +46,11 @@ const routes = [
         path: 'std-profile',
         name: 'Stdprofile',
         component: StdProfile
+      },
+      {
+        path: 'list-sv',
+        name: 'ListSV',
+        component: ListSV
       },
       {
         path: 'table-list',

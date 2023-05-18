@@ -26,7 +26,7 @@
         <i class="nc-icon nc-single-copy-04"></i>
         <p>quản lý hóa đơn</p>
       </sidebar-link>
-      <sidebar-link to="/admin/std-profile">
+      <sidebar-link to="/admin/list-sv">
         <i class="nc-icon nc-badge"></i>
         <p>Tài khoản Sinh viên</p>
       </sidebar-link>
