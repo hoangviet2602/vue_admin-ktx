@@ -114,8 +114,10 @@
                                 <th><b>Đến ngày</b></th>
                                 <th><b>CS điện cũ</b></th>
                                 <th><b>CS điện mới</b></th>
+                                <th><b>Giá điện(kWh)</b></th>
                                 <th><b>CS nước cũ</b></th>
                                 <th><b>CS nước mới</b></th>
+                                <th><b>Giá nước(m3)</b></th>
                                 <th><b>Tổng tiền</b></th>
                                 <th><b>Tình trạng</b></th>
                                 <th>#</th>
@@ -129,8 +131,10 @@
                                 <td>{{ moment(item.hoaDonTienDienNuoc.endDate).format('DD/MM/yyyy ') }}</td>
                                 <td>{{ item.hoaDonTienDienNuoc.csDien1 }}</td>
                                 <td>{{ item.hoaDonTienDienNuoc.csDien2 }}</td>
+                                <td>{{ item.hoaDonTienDienNuoc.giadien }}</td>
                                 <td>{{ item.hoaDonTienDienNuoc.csNuoc1 }}</td>
                                 <td>{{ item.hoaDonTienDienNuoc.csNuoc2 }}</td>
+                                <td>{{ item.hoaDonTienDienNuoc.gianuoc }}</td>
                                 <td>{{ item.hoaDonTienDienNuoc.tongTien }}</td>
                                 <td>
                                     <span v-if="item.hoaDonTienDienNuoc.status == 0">Chưa đóng</span>

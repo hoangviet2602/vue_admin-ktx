@@ -133,10 +133,12 @@
             </template>
 
             <div class="form-group mr-2 ml-2">
-              <select class="form-control" id="exampleCombobox" style="width: auto;">
-                <option>Gia hạn phòng</option>
-                <option>Chuyển phòng</option>
-                <option>Hủy phòng</option>
+              <select v-model="selectedYC" class="form-control" id="exampleCombobox" style="width: auto;"
+                @change="LoaiYCChange()">
+                <option value="0">Tất cả</option>
+                <option value="1">Gia hạn phòng</option>
+                <option value="2">Chuyển phòng</option>
+                <option value="3">Hủy phòng</option>
               </select>
             </div>
             <table class="table table-sm table-hover ">
@@ -170,7 +172,8 @@
                   <td>
                     <!-- <button class="btn btn-primary" @click="showDetails = true">Xem chi tiết</button> -->
 
-                    <button class="btn btn-sm btn-primary" @click="showsubform(item.loaiYc, index)">Chi tiết</button>
+                    <button v-if="item.status == 0" class="btn btn-sm btn-primary"
+                      @click="showsubform(item.loaiYc, index)">Chi tiết</button>
 
                   </td>
                 </tr>
@@ -197,7 +200,8 @@
                 <h5> <b>YÊU CẦU PHÒNG</b> </h5>
               </div>
               <div class="col-sm-2 ">
-                <Button variant="outline" color="dark" class="btn btn-sm btn-light" @click="showSubform1 = false,showTuChoi = false">
+                <Button variant="outline" color="dark" class="btn btn-sm btn-light"
+                  @click="showSubform1 = false, showTuChoi = false">
                   Đóng</Button>
               </div>
             </div>
@@ -212,16 +216,17 @@
                 <p><b>{{ dataSubform.tenSinhVien }}</b></p>
                 <p><b>{{ dataSubform.tenPhong }}</b></p>
                 <p><b>Chuyển phòng </b></p>
-                <p><b>{{ dataSubform.idNewRoom }}</b></p>
+                <p><b>{{ dataSubform.tenPhongMoi }}</b></p>
               </div>
             </div>
             <div class="col-sm-10 mt-2">
-              <input v-model="lydo" type="text" placeholder="lý do từ chối" class="form-control" v-if="showTuChoi"  required/>
+              <input v-model="lydo" type="text" placeholder="lý do từ chối" class="form-control" v-if="showTuChoi"
+                required />
             </div>
             <div class="row pt-5">
               <div class="col-sm-6 mx-auto d-flex justify-content-center flex-column">
-                <button class="btn btn-sm btn-danger"
-                  @click="ChangeStatus(dataSubform.idYC, -1, dataSubform.loaiYc)">Từ chối</button>
+                <button class="btn btn-sm btn-danger" @click="ChangeStatus(dataSubform.idYC, -1, dataSubform.loaiYc)">Từ
+                  chối</button>
               </div>
               <div class="col-sm-6 mx-auto d-flex justify-content-center flex-column">
                 <button class="btn btn-sm btn-primary"
@@ -260,7 +265,8 @@
               </div>
             </div>
             <div class="col-sm-10 mt-2">
-              <input v-model="lydo" type="text" placeholder="lý do từ chối" class="form-control" v-if="showTuChoi" required/>
+              <input v-model="lydo" type="text" placeholder="lý do từ chối" class="form-control" v-if="showTuChoi"
+                required />
             </div>
 
             <div class="row pt-5">
@@ -285,7 +291,8 @@
                 <h5> <b>YÊU CẦU PHÒNG</b> </h5>
               </div>
               <div class="col-sm-2 ">
-                <Button variant="outline" color="dark" class="btn btn-sm btn-light" @click="showSubform3 = false,showTuChoi = false">
+                <Button variant="outline" color="dark" class="btn btn-sm btn-light"
+                  @click="showSubform3 = false, showTuChoi = false">
                   Đóng</Button>
               </div>
             </div>
@@ -304,12 +311,13 @@
               </div>
             </div>
             <div class="col-sm-10 mt-2">
-              <input v-model="lydo" type="text" placeholder="lý do từ chối" class="form-control" v-if="showTuChoi" required/>
+              <input v-model="lydo" type="text" placeholder="lý do từ chối" class="form-control" v-if="showTuChoi"
+                required />
             </div>
             <div class="row pt-5">
               <div class="col-sm-6 mx-auto d-flex justify-content-center flex-column">
-                <button class="btn btn-sm btn-danger"
-                  @click="ChangeStatus(dataSubform.idYC, -1, dataSubform.loaiYc)">Từ chối</button>
+                <button class="btn btn-sm btn-danger" @click="ChangeStatus(dataSubform.idYC, -1, dataSubform.loaiYc)">Từ
+                  chối</button>
               </div>
               <div class="col-sm-6 mx-auto d-flex justify-content-center flex-column">
                 <button class="btn btn-sm btn-primary"
@@ -403,6 +411,7 @@ export default {
     totalPagesTab3() {
       return Math.ceil(this.yeuCauPhong.length / this.itemsPerPage);
     },
+   
   },
   data() {
     return {
@@ -416,7 +425,7 @@ export default {
       showSubform3: false,
       showXepPhong: false,
       showTuChoi: false,
-      lydo:"",
+      lydo: "",
       donDangKy: [],
       yeuCauPhong: [],
       dataSubform: [],
@@ -430,6 +439,7 @@ export default {
       currentPageTab2: 1,
       currentPageTab3: 1,
       itemsPerPage: 10, // The number of items to display per page
+      selectedYC: 1
     }
   },
   methods: {
@@ -492,29 +502,29 @@ export default {
             })
             this.getData()
           }).catch(error => {
-              console.log(error)
+            console.log(error)
           })
       } else if (newstatus == -1) {
         this.showTuChoi = true
-        if(this.lydo != ""){
-          axios.put(`https://localhost:7252/api/YeuCauPhongs/` + idYc + `/tuchoi/` + newstatus +'/'+this.lydo)
-          .then(respone => {
-            this.$notify({
-              title: 'Thông báo',
-              text: 'Đã từ chối!',
-              type: 'danger'
-            })
-            this.lydo == ""
-            this.showTuChoi = false
-            this.showSubform1 = false
-            this.showSubform2 = false
-            this.showSubform3 = false
-            this.getData()
-          }).catch(error => {
+        if (this.lydo != "") {
+          axios.put(`https://localhost:7252/api/YeuCauPhongs/` + idYc + `/tuchoi/` + newstatus + '/' + this.lydo)
+            .then(respone => {
+              this.$notify({
+                title: 'Thông báo',
+                text: 'Đã từ chối!',
+                type: 'danger'
+              })
+              this.lydo == ""
+              this.showTuChoi = false
+              this.showSubform1 = false
+              this.showSubform2 = false
+              this.showSubform3 = false
+              this.getData()
+            }).catch(error => {
               console.log(error)
-          })
+            })
         }
-        
+
       }
 
     },
@@ -545,7 +555,8 @@ export default {
           });
 
       } else if (loaiyc == 3) {
-        //3. Thay đổi tình trạng tài khoản của sinh viên nếu yêu cầu hủy phòng dược chấp nhận (tạo table mới svhuyphong để hoàn trả tiền phòng cho sv) - xóa idphong khỏi sv
+        //3. Thay đổi tình trạng tài khoản của sinh viên nếu yêu cầu hủy phòng dược chấp nhận  - xóa idphong khỏi sv
+        //(tạo table mới svhuyphong để hoàn trả tiền phòng cho sv) 
         axios.put(`https://localhost:7252/api/SinhViens/${this.yeuCauPhong[this.i].idSinhVien}/editroom`, { NewRoom: null, status: 0 })
           .then(response => {
             this.$notify({
@@ -662,9 +673,14 @@ export default {
     goToPageTab3(page) {
       this.currentPageTab3 = page;
     },
+    LoaiYCChange() {
+     
+    },
+
   },
   mounted() {
     this.getData()
+
   }
 }
 </script>
