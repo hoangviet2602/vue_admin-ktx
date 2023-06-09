@@ -38,7 +38,7 @@
                 <tbody>
                   <tr>
                     <th scope="row">Ngày sinh</th>
-                    <td>{{ item.sv.dob}}</td>
+                    <td>{{moment(item.sv.dob).format('DD/MM/yyyy')}}</td>
                   </tr>
                   <tr>
                     <th scope="row">Giới tính</th>

@@ -96,24 +96,7 @@ export default {
     },
     methods: {
         SubmitThongBao() {
-            // var jsonContent = JSON.stringify(this.content).replace(/[<>]/g, function (m) {
-            //     return {
-            //         '<': '\\u003c',
-            //         '>': '\\u003e',
-            //         '"': ''
-            //     }[m];
-            // });
-            // var jsonTittle = JSON.stringify(this.tittle).replace(/[<>]/g, function (m) {
-            //     return {
-            //         '<': '\\u003c',
-            //         '>': '\\u003e',
-            //         '"': ''
-            //     }[m];
-            // });
 
-            // console.log(jsonTittle)
-            // console.log(jsonContent)
-           
             axios.post('https://localhost:7252/api/ThongBaos', { tittle: this.tittle, content: this.content })
                 .then(response => {
                     this.notification = response.data;
@@ -133,7 +116,6 @@ export default {
         }
     },
     mounted() {
-
         axios.get('https://localhost:7252/api/ThongBaos')
             .then(response => {
                 this.notification = response.data;

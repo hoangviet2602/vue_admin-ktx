@@ -27,7 +27,8 @@
                     <td>{{ item.name }}</td>
                     <td>{{ item.sv.namhoc }}</td>
                     <td><span v-if="item.sv.status === 1" style="color: darkgreen;">Bình thường</span>
-                      <span v-if="item.sv.status === 0">Khóa</span>
+                      <span v-if="item.sv.status === -1" style="color: brown;">Khóa</span>
+                        <span v-if="item.sv.status === 0" style="color: darkgreen;">Bình thường</span>
                     </td>
 
                     <td>

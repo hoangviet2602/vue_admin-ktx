@@ -11,6 +11,10 @@
                 <a class="nav-link" :class="{ active: activeTab === 'tab2' }" @click="activeTab = 'tab2'" href="#">HÓA ĐƠN
                     ĐIỆN NƯỚC</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" :class="{ active: activeTab === 'tab3' }" @click="activeTab = 'tab3'" href="#">DANH SÁCH
+                    HOÀN TRẢ PHÍ</a>
+            </li>
         </ul>
         <div class="tab-content">
             <div v-show="activeTab === 'tab1'" class="tab-pane active">
@@ -61,9 +65,9 @@
                                 </td>
                                 <td>
                                     <!-- <button class="btn btn-primary" @click="showDetails = true">Xem chi tiết</button> -->
-                                    
-                                        <button class="btn btn-sm btn-primary">Xem chi tiết</button>
-                                   
+
+                                    <button class="btn btn-sm btn-primary">Xem chi tiết</button>
+
                                 </td>
                             </tr>
                         </tbody>
@@ -85,7 +89,7 @@
                 <card class="strpied-tabled-with-hover" body-classes="table-full-width table-responsive">
                     <template slot="header">
                         <div class="row">
-                            <p>(*) Giá chỉ số điện: 3.000 VNĐ/kWh - Giá chỉ số nước: 15.000/ m3</p>
+
                         </div>
                         <div class="row">
                             <div class="col-sm-10">
@@ -162,6 +166,60 @@
                     </div>
                 </div>
             </div>
+            <div v-show="activeTab === 'tab3'" class="tab-pane active">
+                <card class="strpied-tabled-with-hover" body-classes="table-full-width table-responsive">
+                    <template slot="header">
+                        <div class="row">
+                        </div>
+                        <p class="card-category"></p>
+                    </template>
+                    <table class="table table-sm table-hover ">
+                        <thead class="thead-light">
+                            <tr>
+                                <th><b>STT</b></th>
+                                <th><b>Họ và tên</b></th>
+                                <th><b>Phòng</b></th>
+                                <th><b>Kì</b></th>
+                                <th><b>Tổng tiền</b></th>
+                                <th><b>Trạng thái</b></th>
+                                <th>#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in dataHoanTraPhi" :key="item.id">
+                                <td>{{ index + 1 }}</td>
+                                <td>{{ item.hoten }}</td>
+                                <td>{{ item.tenphong }}</td>
+                                <td>{{ item.ki }}</td>
+                                <td>{{ item.tienCoc.toLocaleString("vi-VN", { style: "currency", currency: "VND", }) }}
+                                </td>
+                                <td>
+                                    <span v-if="item.status == 0" style="color: brown;">Chưa hoàn trả</span>
+                                    <span v-if="item.status == 1" style="color:darkgreen ;">Đã hoàn trả</span>
+
+                                </td>
+                                <td>
+                                    <!-- <button class="btn btn-primary" @click="showDetails = true">Xem chi tiết</button> -->
+
+                                    <button class="btn btn-sm btn-primary">Xem chi tiết</button>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </card>
+                <!-- phân trang thuê phòng -->
+                <!-- <div class="pagination-container">
+                    <div class="pagination">
+                        <a @click="previousPageThuePhong" :disabled="currentPageThuePhong === 1">&laquo;</a>
+                        <a v-for="page in totalPagesThuePhong" :key="page"
+                            :class="{ active: page === currentPageThuePhong }" @click="goToPageThuePhong(page)">
+                            {{ page }}
+                        </a>
+                        <a @click="nextPageThuePhong" :disabled="currentPageThuePhong === totalPagesThuePhong">&raquo;</a>
+                    </div>
+                </div> -->
+            </div>
             <!-- // upoload hóa đơn -->
             <div v-if="showSubform" class="backdrop">
                 <div class="subform">
@@ -222,6 +280,7 @@ export default {
             showDetails: false,
             dataDienNuoc: [],
             dataThuePhong: [],
+            dataHoanTraPhi : [],
             showSubform: false,
             dataSubform: [],
             currentPageThuePhong: 1, // The current page number
@@ -243,6 +302,14 @@ export default {
             axios.get("https://localhost:7252/api/HopDongThuePhongs").
                 then(respone => {
                     this.dataThuePhong = respone.data
+                    console.log(this.dataThuePhong)
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+            axios.get("https://localhost:7252/api/HopDongThuePhongs/HoanTraPhi").
+                then(respone => {
+                    this.dataHoanTraPhi = respone.data
                     console.log(this.dataThuePhong)
                 })
                 .catch(error => {

@@ -30,10 +30,10 @@
         <i class="nc-icon nc-badge"></i>
         <p>Tài khoản Sinh viên</p>
       </sidebar-link>
-      <sidebar-link to="/admin/thongke">
+      <!-- <sidebar-link to="/admin/thongke">
         <i class="nc-icon nc-chart-bar-32"></i>
         <p>Thống kê</p>
-      </sidebar-link>
+      </sidebar-link> -->
 
       <!-- <template slot="bottom-links">
         <sidebar-link class="active"

@@ -176,7 +176,7 @@ export default {
                                                 .toLowerCase();
                                            
             newObject.password = '12345678'
-
+            newObject.status = 1 
             axios.post("https://localhost:7252/api/SinhViens", newObject)
                 .then(response => {
                     // Xử lý phản hồi từ server khi thay đổi status thành công

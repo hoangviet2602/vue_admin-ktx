@@ -42,7 +42,7 @@
                     <tr v-for="(item, index) in paginatedItemsTab1" :key="item.id">
                       <td>{{ index + 1 }}</td>
                       <td>{{ item.hoten }}</td>
-                      <td>{{ moment(item.ngaygui).format('DD/MM/yyyy HH:mm:ss') }}</td>
+                      <td>{{ moment(item.ngayGui).format('DD/MM/yyyy ') }}</td>
                       <td><span v-if="item.status === 0" style="color: darkgreen;">Đang chờ</span>
                         <span v-if="item.status === 1">Đã hoàn thành</span>
                         <span v-if="item.status === -1" style="color: red;">Đã từ chối</span>
@@ -411,7 +411,7 @@ export default {
     totalPagesTab3() {
       return Math.ceil(this.yeuCauPhong.length / this.itemsPerPage);
     },
-   
+
   },
   data() {
     return {
@@ -439,7 +439,8 @@ export default {
       currentPageTab2: 1,
       currentPageTab3: 1,
       itemsPerPage: 10, // The number of items to display per page
-      selectedYC: 1
+      selectedYC: 1,
+      kihientai: 0
     }
   },
   methods: {
@@ -544,8 +545,17 @@ export default {
         const { idSinhVien: sinhVienId, kiGiaHanId: kiId, phongId } = this.yeuCauPhong[this.i];
         const newHopDong = { sinhVienId, kiId, phongId }
         console.log(newHopDong)
-        //2. tạo hóa đơn mới nếu phe duyệt yêu cầu gia hạn phòng
+        //2. tạo hợp đồng nếu phe duyệt yêu cầu gia hạn phòng
         axios.post(`https://localhost:7252/api/HopDongThuePhongs`, newHopDong)
+          .then(response => {
+            // console.log(this.yeuCauPhong[this.i].idNewRoom)
+            // console.log(response.data)
+          })
+          .catch(error => {
+            console.log(error)
+          });
+        // chuyen phong moi 
+        axios.put(`https://localhost:7252/api/SinhViens/${newHopDong.sinhVienId}/editroom2/` + newHopDong.phongId)
           .then(response => {
             console.log(this.yeuCauPhong[this.i].idNewRoom)
             console.log(response.data)
@@ -553,7 +563,6 @@ export default {
           .catch(error => {
             console.log(error)
           });
-
       } else if (loaiyc == 3) {
         //3. Thay đổi tình trạng tài khoản của sinh viên nếu yêu cầu hủy phòng dược chấp nhận  - xóa idphong khỏi sv
         //(tạo table mới svhuyphong để hoàn trả tiền phòng cho sv) 
@@ -567,6 +576,22 @@ export default {
           })
           .catch(error => {
             console.log(error)
+          });
+        console.log('ok: ' + this.yeuCauPhong[this.i].idSinhVien + this.yeuCauPhong[this.i].kiHuyId + this.yeuCauPhong[this.i].phongId)
+        axios.get('https://localhost:7252/api/HopDongThuePhongs/HuyPhong', {
+          params: {
+            sinhvienId: this.yeuCauPhong[this.i].idSinhVien,
+            kiId: this.yeuCauPhong[this.i].kiHuyId,
+            phongId: this.yeuCauPhong[this.i].phongId
+          }
+        })
+          .then(response => {
+            // Xử lý kết quả
+            console.log(response.data);
+          })
+          .catch(error => {
+            // Xử lý lỗi
+            console.error(error);
           });
       }
     },
@@ -619,17 +644,33 @@ export default {
       console.log(this.selectedOptionPhong)
       axios.put(`https://localhost:7252/api/SinhViens/${this.iSinhVienMoi}/editroom2/` + this.selectedOptionPhong)
         .then(response => {
+          axios.post(`https://localhost:7252/api/HopDongThuePhongs`, { sinhVienId: this.iSinhVienMoi, kiId: this.kihientai, phongId: this.selectedOptionPhong })
+            .then(response => {
+              console.log(response)
+            })
+            .catch(error => {
+              console.log(error)
+            });
+          this.getData()
           this.$notify({
             title: 'Thông báo',
             text: 'Xếp phòng thành công!',
             type: 'success'
           })
-          this.getData()
-          console.log(response.data)
         })
         .catch(error => {
           console.log(error)
         });
+    },
+    getKiHienTai() {
+      //this.kihientai[0].idKi
+      axios.get('https://localhost:7252/api/Kis/KiHienTai')
+        .then(response => {
+          this.kihientai = response.data[0].idKi
+          console.log(this.kihientai)
+        }).catch(error => {
+          console.log(error)
+        })
     },
     //tab1
     previousPageTab1() {
@@ -674,13 +715,13 @@ export default {
       this.currentPageTab3 = page;
     },
     LoaiYCChange() {
-     
+
     },
 
   },
   mounted() {
     this.getData()
-
+    this.getKiHienTai()
   }
 }
 </script>
@@ -706,5 +747,6 @@ export default {
   width: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 9998;
-}</style>
+}
+</style>
 
